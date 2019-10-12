@@ -9,6 +9,7 @@ public class Coachee {
     private String coacheeName;
     private String coacheeEmail;
     private String coacheePassword;
+    private String coacheeCellphone;
 
     public int getCoacheeId() {
         return coacheeId;
@@ -40,5 +41,13 @@ public class Coachee {
 
     public void setCoacheePassword(String coacheePassword) {
         this.coacheePassword = coacheePassword;
+    }
+
+    public String getCoacheeCellphone() {
+        return coacheeCellphone;
+    }
+
+    public void setCoacheeCellphone(String cellphone) {
+        this.coacheeCellphone = coacheeCellphone;
     }
 }

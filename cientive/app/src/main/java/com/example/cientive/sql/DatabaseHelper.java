@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.cientive.model.Coachee;
+import com.example.cientive.model.LoginCoach;
 import com.example.cientive.model.User;
 
 import java.util.ArrayList;
@@ -24,6 +26,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // User table name
     private static final String TABLE_USER = "user";
+    private static final String TABLE_COACH = "Coach";
+    private static final String TABLE_COACHEE = "Coachee";
 
     // User Table Columns names
     private static final String COLUMN_USER_ID = "user_id";
@@ -31,13 +35,48 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_USER_EMAIL = "user_email";
     private static final String COLUMN_USER_PASSWORD = "user_password";
 
+    // coach columns for coach
+    private static final String COLUMN_COACH_ID = "coach_id";
+    private static final String COLUMN_COACH_NAME = "coach_name";
+    private static final String COLUMN_COACH_EMAIL = "coach_email";
+    private static final String COLUMN_COACH_PASSWORD = "coach_password";
+    private static final String COLUMN_COACH_PRICE = "coach_price";
+    private static final String COLUMN_COACH_ASSOCIATION = "coach_association";
+    private static final String COLUMN_COACH_ADDRESS = "coach_address";
+    private static final String COLUMN_COACH_CELLPHONE = "coach_cellphone";
+
+    // coach columns
+    private static final String COLUMN_COACHEE_ID = "coachee_id";
+    private static final String COLUMN_COACHEE_NAME = "coachee_name";
+    private static final String COLUMN_COACHEE_EMAIL = "coachee_email";
+    private static final String COLUMN_COACHEE_PASSWORD = "coachee_password";
+    private static final String COLUMN_COACHEE_CELLPHONE = "coachee_cellphone";
+
+
+    // create table sql query for coach
+    private String CREATE_COACH_TABLE = "CREATE TABLE " + TABLE_COACH + "("
+            + COLUMN_COACH_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_COACH_NAME + " TEXT,"
+            + COLUMN_COACH_EMAIL + " TEXT," + COLUMN_COACH_PASSWORD + " TEXT" + COLUMN_COACH_PRICE + "TEXT" + COLUMN_COACH_ASSOCIATION + "TEXT" + COLUMN_COACH_ADDRESS + "TEXT" + COLUMN_COACH_CELLPHONE + "TEXT" + ")";
+
+    // create table sql query for coachee
+    private String CREATE_COACHEE_TABLE = "CREATE TABLE " + TABLE_COACHEE + "("
+            + COLUMN_COACHEE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_COACHEE_NAME + " TEXT,"
+            + COLUMN_COACHEE_EMAIL + " TEXT," + COLUMN_COACHEE_PASSWORD + " TEXT" + COLUMN_COACHEE_CELLPHONE + "TEXT" + ")";
+
+
     // create table sql query
     private String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USER + "("
             + COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_USER_NAME + " TEXT,"
             + COLUMN_USER_EMAIL + " TEXT," + COLUMN_USER_PASSWORD + " TEXT" + ")";
 
-    // drop table sql query
-    private String DROP_USER_TABLE = "DROP TABLE IF EXISTS " + TABLE_USER;
+    // drop table sql query for coach
+    private String DROP_COACH_TABLE = "DROP TABLE IF EXISTS " + TABLE_COACH;
+
+    // drop table sql query for coachee
+    private String DROP_COACHEE_TABLE = "DROP TABLE IF EXISTS " + TABLE_COACHEE;
+
+    // drop table sql query for booking
+
 
     /**
      * Constructor
@@ -51,6 +90,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_USER_TABLE);
+        db.execSQL(CREATE_COACH_TABLE);
+        db.execSQL(CREATE_COACHEE_TABLE);
     }
 
 
@@ -58,12 +99,121 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         //Drop User Table if exist
-        db.execSQL(DROP_USER_TABLE);
+        db.execSQL(DROP_COACH_TABLE);
+        db.execSQL(DROP_COACHEE_TABLE);
 
         // Create tables again
         onCreate(db);
 
     }
+
+
+
+
+
+    /**
+     * This method is to create coach record
+     *
+     * @param coach
+     */
+
+    public void addCoach(LoginCoach coach) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_COACH_NAME, coach.getCoachName());
+        values.put(COLUMN_COACH_EMAIL, coach.getCoachEmail());
+        values.put(COLUMN_COACH_PASSWORD, coach.getCoachPassword());
+
+        // Inserting Row
+        db.insert(TABLE_COACH, null, values);
+        db.close();
+    }
+
+    /**
+     * This method is to create coachee record
+     *
+     * @param coachee
+     */
+
+    public void addCoachee(Coachee coachee) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_COACHEE_NAME, coachee.getCoacheeName());
+        values.put(COLUMN_COACHEE_EMAIL, coachee.getCoacheeEmail());
+        values.put(COLUMN_COACHEE_PASSWORD, coachee.getCoacheePassword());
+
+        // Inserting Row
+        db.insert(TABLE_COACHEE, null, values);
+        db.close();
+    }
+
+    /**
+     * This method to update coach record
+     *
+     * @param coach
+     */
+    public void updateCoach(LoginCoach coach) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_COACH_NAME, coach.getCoachName());
+        values.put(COLUMN_COACH_EMAIL, coach.getCoachEmail());
+        values.put(COLUMN_COACH_PASSWORD, coach.getCoachPassword());
+
+        // updating row
+        db.update(TABLE_COACH, values, COLUMN_COACH_ID + " = ?",
+                new String[]{String.valueOf(coach.getCoachId())});
+        db.close();
+    }
+
+    /**
+     * This method to update coachee record
+     *
+     * @param coachee
+     */
+    public void updateCoachee(Coachee coachee) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_COACHEE_NAME, coachee.getCoacheeName());
+        values.put(COLUMN_COACHEE_EMAIL, coachee.getCoacheeEmail());
+        values.put(COLUMN_COACHEE_PASSWORD, coachee.getCoacheePassword());
+
+        // updating row
+        db.update(TABLE_COACHEE, values, COLUMN_COACHEE_ID + " = ?",
+                new String[]{String.valueOf(coachee.getCoacheeId())});
+        db.close();
+    }
+    /**
+     * This method is to delete coach record
+     *
+     * @param coach
+     */
+    public void deleteCoach(LoginCoach coach) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        // delete user record by id
+        db.delete(TABLE_COACH, COLUMN_USER_ID + " = ?",
+                new String[]{String.valueOf(coach.getCoachId())});
+        db.close();
+    }
+
+    /**
+     * This method is to delete coachee record
+     *
+     * @param coachee
+     */
+    public void deleteCoachee(Coachee coachee) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        // delete user record by id
+        db.delete(TABLE_COACHEE, COLUMN_COACHEE_ID + " = ?",
+                new String[]{String.valueOf(coachee.getCoacheeId())});
+        db.close();
+    }
+
+
+
 
     /**
      * This method is to create user record
@@ -155,6 +305,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[]{String.valueOf(user.getId())});
         db.close();
     }
+
+
+
 
     /**
      * This method is to delete user record
