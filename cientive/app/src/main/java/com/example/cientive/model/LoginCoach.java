@@ -8,7 +8,6 @@ public class LoginCoach {
     private String email;
     private String password;
     private String price_range;
-    private String coach_area;
     private String qualification;
     private String association;
     private String address;
@@ -51,9 +50,6 @@ public class LoginCoach {
 
     public void setCoachPrice_range(String price_range) {this.price_range = price_range;}
 
-    public  String  getCoach_area() {return coach_area;}
-
-    public void setCoach_area(String coach_area) {this.coach_area = coach_area;}
 
     public  String getCoachQualification() {return qualification;}
 
